@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        
+        /* General Body Styles */
+        body {
+            overflow-x: hidden;
+        font-family: 'Georgia', serif;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        scroll-behavior: smooth;
+        }
+        
+        /* Canvas for Three.js Animation */
+        #three-canvas {
+            position:fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Header Styles */
+        .header {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding-top: 10px;
+            font-size: 3rem;
+            color: #707C80; /* Sophisticated metallic gray */
+            text-shadow: 2px 2px 8px rgba(108, 122, 137, 0.3);font-weight: bold;
+            transition: color 0.1s;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+        font-family: 'Parisienne', cursive;
+        }
+        /* Typing Animation */
+        .typing {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 6s steps(40, end) forwards, blink-caret 0.75s step-end infinite;
+            font-size: 1.3rem;
+            color: #778899;
+            font-weight: lighter;
+            position: relative;
+        }
+
+        .typing::after {
+            content: "|";
+            position: absolute;
+            left: 100%;
+            margin-left: 0.2rem;
+            animation: blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px 0;
+            background-color: rgba(248, 249, 250, 0.9);
+            color: #5A6D7E; /* Deeper slate */
+            border-top: 1px solid #dee2e6;
+        }
+
+        /* Heart Animation */
+        .heart {
+            color: #778899; /* Matching slate */
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        /* Memories Section */
+        .memories {
+            position: relative;
+            z-index: 1;
+            padding: 80px 0;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            margin: 0 auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .memories h2 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            color: #2C3E50; /* Deep navy */
+            text-shadow: 1px 1px 5px rgba(44, 62, 80, 0.1);
+        }
+
+        .memories .journey-text {
+            font-size: 1.5rem;
+            color: #C0C0C0; /* Metallic silver */
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .celebration-cake {
+    text-align: center;
+    margin-top: 40px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px; /* Reduced padding */
+    max-width: 600px; /* Limit the width */
+    margin-left: auto; /* Center align */
+    margin-right: auto; /* Center align */
+}
+
+.cake-img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+    .anniversary-message {
+        font-size: 1.3rem;
+        color: #2C3E50; /* Navy blue */
+        font-weight: bold;
+        margin-top: 20px;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    }
+        /* Icon Styling */
+        .icon-background {
+            display: inline-block;
+            width: 200px; /* Increased size */
+            height: 200px; /* Increased size */
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 10px;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 10px rgba(44, 62, 80, 0.1);
+        }
+
+        .icon-background:hover {
+            transform: scale(1.05);
+        }
+
+        /* Photos Background */
+        .icon-background-photos {
+    background-image: url('/src/images/main1.jpg');
+    background-size: cover; /* Ensures the image fully covers the div */
+    background-position: top center; /* Keeps the top part visible */
+    background-repeat: no-repeat;
+}
+
+
+        /* Videos Background */
+        .icon-background-videos {
+            position: relative;
+        }
+
+        .icon-background-videos .background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+        }
+
+        /* Love Letter Section */
+        .love-letter {
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.98);
+            color: #4A5A6B; /* Steel blue */
+            border-radius: 8px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .love-letter h3 {
+            color: #5A6D7E; /* Medium slate */
+        }
+
+        .love-letter p {
+            font-size: 1.2rem;
+            color: #6B7B8C; /* Light slate */ /* Warm Chocolate */
+        }
+
+        /* Remove underline from links */
+        .icon-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Additional Content Section */
+        .additional-content {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            margin: 40px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+        }
+
+        .additional-content h4 {
+            color: #2C3E50; /* Navy blue */
+            margin-bottom: 20px;
+        }
+
+        .additional-content p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Three.js Canvas for Background Particles -->
+    <div id="three-canvas"></div>
+    <!-- Header Section -->
+    <div class="container text-center mt-5">
+        <div class="header">
+            <h1>Happy Anniversary to Us, My Love!💖 <span class="heart"></span></h1>
+            <div class="typing">25 years of love, laughter, and countless memories together!</div>
+        </div>
+    </div>
+
+    <!-- Memories Section -->
+    <div class="memories">
+        <h2>25 years of love & forever to go ❤️</h2>
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- Photos Icon with Background Image -->
+                <div class="col-md-4 text-center">
+                    <a href="photos.html" class="icon-link">
+                        <div class="icon-background icon-background-photos"></div>
+                    </a>
+                </div>
+
+                <!-- Videos Icon with Background Video -->
+                <div class="col-md-4 text-center">
+                    <a href="videos.html" class="icon-link">
+                        <div class="icon-background icon-background-videos" style="background-image: url('src/images/main2.jpg'); background-size: cover; background-position: center;"></div>
+                    </a>
+                </div>
+            </div>
+            <p class="journey-text">Our Journey in Photos</p>
+        </div>
+    </div>
+
+
+    <!-- Additional Content Section -->
+<div class="additional-content">
+    <h4>Join Me in Celebrating Our Love!</h4>
+    <img src="src/images/cake_image.jpg" alt="Anniversary Cake" class="cake-img">
+    <p class="anniversary-message"><p>Sainath, can you believe it’s been 25 years? It feels like just yesterday we started this beautiful journey together!!
+    </p>
+    <p>Lakshmi, every moment with you has been a blessing, and I wouldn’t trade it for anything in the world. Here’s to us, to all the memories we’ve made and the countless more to come! 💖</p>
+</div>
+
+
+    <!-- Love Map Section -->
+<div class="container love-map">
+    <h3>If Our Love Was a Map...</h3>
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <img src="src/images/first_meet.jpg" alt="First Meeting" class="img-fluid rounded shadow">
+        </div>
+        <div class="col-md-6">
+            <p><strong>The Starting Point:</strong> Where two hearts met and found home in each other's smile.</p>
+        </div>
+    </div>
+
+    <div class="row align-items-center mb-5 flex-md-row-reverse">
+        <div class="col-md-6">
+            <img src="src/images/mountain.jpg" alt="Challenges" class="img-fluid rounded shadow">
+        </div>
+        <div class="col-md-6">
+            <p><strong>The Mountains:</strong> Every challenge we climbed, hand in hand, made our bond unbreakable.</p>
+        </div>
+    </div>
+
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <img src="src/images/meadow.jpg" alt="Joyful Moments" class="img-fluid rounded shadow">
+        </div>
+        <div class="col-md-6">
+            <p><strong>The Meadow of Laughter:</strong> Where sunshine, silly jokes, and spontaneous dancing made life magical.</p>
+        </div>
+    </div>
+
+    <div class="row align-items-center mb-5 flex-md-row-reverse">
+        <div class="col-md-6">
+            <img src="src/images/starlight.jpeg" alt="Dreams and Future" class="img-fluid rounded shadow">
+        </div>
+        <div class="col-md-6">
+            <p><strong>The Starlit Path Ahead:</strong> A never-ending road filled with dreams yet to be dreamed, and love that lights the way.</p>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <h4>Here’s to many more miles, memories, and magical moments.</h4>
+        <p class="text-muted">Our love is the map. Our journey is the treasure. 💖</p>
+    </div>
+</div>
+
+    <!-- Music Player -->
+<audio id="background-music" loop autoplay>
+    <source src="src/songs/love_song.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Mute/Unmute Button -->
+<button id="music-toggle" class="btn btn-light position-fixed" style="top: 20px; right: 20px; z-index: 9999; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+    <i id="music-icon" class="bi bi-volume-up-fill"></i>
+</button>
+
+<script>
+    const music = document.getElementById('background-music');
+    const toggleBtn = document.getElementById('music-toggle');
+    const icon = document.getElementById('music-icon');
+
+    // Load saved playback position
+    const savedTime = localStorage.getItem('music-time');
+    if (savedTime) music.currentTime = parseFloat(savedTime);
+
+    // Restore mute state
+    const isMuted = localStorage.getItem('music-muted') === 'true';
+    music.muted = isMuted;
+    icon.className = isMuted ? 'bi bi-volume-mute-fill' : 'bi bi-volume-up-fill';
+
+    // Update position regularly
+    setInterval(() => {
+        localStorage.setItem('music-time', music.currentTime);
+    }, 1000);
+
+    // Save mute status when changed
+    toggleBtn.addEventListener('click', () => {
+        music.muted = !music.muted;
+        icon.className = music.muted ? 'bi bi-volume-mute-fill' : 'bi bi-volume-up-fill';
+        localStorage.setItem('music-muted', music.muted);
+    });
+
+    // Ensure audio starts only if autoplay is allowed
+    document.addEventListener('DOMContentLoaded', () => {
+        music.play().catch(() => {
+            // On some browsers, autoplay might be blocked unless user interacts
+            toggleBtn.addEventListener('click', () => music.play());
+        });
+    });
+</script>
+
+    
+    
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <p>Made With love 💌, Sainath 💞 Lakshmi శుభం
+        </p>
+    </footer>
+
+    <!-- Three.js Script for Particle Background -->
+    <script>
+        // Set up the scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('three-canvas').appendChild(renderer.domElement);
+
+        // Add particles
+        const particleCount = 1000;
+        const particles = new THREE.BufferGeometry();
+        const positions = [];
+
+        for (let i = 0; i < particleCount; i++) {
+            positions.push(
+                (Math.random() * 2 - 1) * 50,
+                (Math.random() * 2 - 1) * 50,
+                (Math.random() * 2 - 1) * 50
+            );
+        }
+
+        particles.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+
+        const particleMaterial = new THREE.PointsMaterial({
+            color: 0xff6f91,
+            size: 0.5,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particleSystem = new THREE.Points(particles, particleMaterial);
+        scene.add(particleSystem);
+
+        // Set initial camera position
+        camera.position.z = 20;
+
+        // Animation function
+        function animate() {
+            requestAnimationFrame(animate);
+            particleSystem.rotation.x += 0.001;
+            particleSystem.rotation.y += 0.001;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resizing
+        window.addEventListener('resize', function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

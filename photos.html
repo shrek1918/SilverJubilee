@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Diary - KalpsMyLife</title>
+    <!-- Bootstrap CSS -->
+     <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* General Body Styling */
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+        }
+
+        /* Gallery Header */
+        .gallery-header {
+            text-align: center;
+            padding: 60px 20px;
+            color: #ff69b4;
+            position: relative;
+            z-index: 1;
+        }
+
+        .gallery-header h1 {
+            font-family: 'Segoe Script', sans-serif;
+            font-size: 3rem;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 2rem;
+            color: #fff;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        /* Scrollable Gallery */
+        .scrollable-gallery {
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            gap: 10px; /* Adds space between images */
+            padding: 10px;
+            margin-bottom: 40px;
+        }
+
+        /* Gallery Images without Hover Effect */
+        .scrollable-gallery img {
+            border-radius: 10px;
+            width: 300px;
+            height: auto;
+            flex-shrink: 0;
+        }
+
+        /* Three.js Canvas */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Custom Scrollbar Styles */
+        .scrollable-gallery::-webkit-scrollbar {
+            height: 8px;
+            background: rgba(128, 128, 128, 0.5);
+        }
+
+        .scrollable-gallery::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+        }
+
+        .scrollable-gallery::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js Canvas -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Gallery Header -->
+    <header class="gallery-header">
+        <h1>Photo Diary</h1>
+        <p>Beautiful moments of Us Together</p>
+    </header>
+
+    <!-- Gallery Sections -->
+    <div class="container">
+        <div class="section-title">Life’s been one wild, beautiful adventure with you</div>
+        
+        <!-- Landscape Photos -->
+        <div class="scrollable-gallery" id="pondy-gallery">
+            <img src="src/images/pic1.jpg" >
+            <img src="src/images/main1.jpg" >
+            <img src="src/images/pic2.jpg">
+            <img src="src/images/pic3.jpg">
+            <img src="src/images/pic3g.jpg">
+            <img src="src/images/pic4.jpg">
+            <img src="src/images/pic4g.jpg">
+            <img src="src/images/pic5.jpg">
+            <img src="src/images/pic5g.jpg">
+            <img src="src/images/pic6.jpg">
+            <img src="src/images/pic7g.jpg">
+            <img src="src/images/pic7.jpg">
+            <img src="src/images/pic8.jpg">
+        </div>
+        
+
+    </div>
+
+    <footer class="text-center">
+        <p>Made With love 💌, Sainath 💞 Lakshmi శుభం
+        </p>
+    </footer>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Three.js Animation Setup
+        const canvas = document.getElementById('three-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // Particle System
+        const particles = new THREE.BufferGeometry();
+        const particleCount = 5000;
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+        
+        for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 100;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+            
+            colors[i * 3] = Math.random();
+            colors[i * 3 + 1] = Math.random();
+            colors[i * 3 + 2] = Math.random();
+        }
+        
+        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        
+        const particleMaterial = new THREE.PointsMaterial({ size: 0.1, vertexColors: true });
+        const particleSystem = new THREE.Points(particles, particleMaterial);
+        scene.add(particleSystem);
+
+        camera.position.z = 10;
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            particleSystem.rotation.y += 0.001;
+            particleSystem.rotation.x += 0.001;
+            renderer.render(scene, camera);
+        }
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        animate();
+
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+    <!-- Music Player -->
+<audio id="background-music" loop autoplay>
+    <source src="src/songs/love_song.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Mute/Unmute Button -->
+<button id="music-toggle" class="btn btn-light position-fixed" style="top: 20px; right: 20px; z-index: 9999; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+    <i id="music-icon" class="bi bi-volume-up-fill"></i>
+</button>
+
+<script>
+    const music = document.getElementById('background-music');
+    const toggleBtn = document.getElementById('music-toggle');
+    const icon = document.getElementById('music-icon');
+
+    // Load saved playback position
+    const savedTime = localStorage.getItem('music-time');
+    if (savedTime) music.currentTime = parseFloat(savedTime);
+
+    // Restore mute state
+    const isMuted = localStorage.getItem('music-muted') === 'true';
+    music.muted = isMuted;
+    icon.className = isMuted ? 'bi bi-volume-mute-fill' : 'bi bi-volume-up-fill';
+
+    // Update position regularly
+    setInterval(() => {
+        localStorage.setItem('music-time', music.currentTime);
+    }, 1000);
+
+    // Save mute status when changed
+    toggleBtn.addEventListener('click', () => {
+        music.muted = !music.muted;
+        icon.className = music.muted ? 'bi bi-volume-mute-fill' : 'bi bi-volume-up-fill';
+        localStorage.setItem('music-muted', music.muted);
+    });
+
+    // Ensure audio starts only if autoplay is allowed
+    document.addEventListener('DOMContentLoaded', () => {
+        music.play().catch(() => {
+            // Some browsers may block autoplay
+            toggleBtn.addEventListener('click', () => music.play());
+        });
+    });
+</script>
+
+</body>
+</html>
